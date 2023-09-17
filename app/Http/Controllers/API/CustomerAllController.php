@@ -11,9 +11,7 @@ class CustomerAllController extends Controller
 
     public function __invoke(Customer $customer)
     {
-        $customer->factory(3)->create();
-
-        $customers = $customer->all();
+        $customers = $customer->select(['id', 'street'])->get();
 
         return response()->json([
             'customers' => $customers
