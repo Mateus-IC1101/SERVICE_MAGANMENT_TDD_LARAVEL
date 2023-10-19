@@ -4,6 +4,7 @@ namespace Tests\Feature\API;
 
 use App\Models\Customer;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -45,5 +46,30 @@ class CustomersControllerTest extends TestCase
         }
 
 
+    }
+
+    public function test_customers_store_api(): void {
+
+        $response = $this->postJson('/api/customers/store',
+         [
+            'name' => 'Sally',
+            'street' => 'Rua x',
+            'neighborhood' => 'Pindorama',
+            'number_house' => '1782',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+
+         ]
+        );
+        $response
+            ->assertStatus(200)
+            ->assertJson(
+                ['customer' => true]
+            );
+
+        $response->assertJson(fn (AssertableJson $json) =>
+            $json->has('customer.name')
+            ->where('customer.name', fn (string $name) => str($name)->is('Sally'))
+        );
     }
 }

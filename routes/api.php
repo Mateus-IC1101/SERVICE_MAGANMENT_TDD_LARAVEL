@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CustomerAllController;
+use App\Http\Controllers\API\CustomerStoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/customers', CustomerAllController::class);
+Route::post('/customers/store', CustomerStoreController::class);
 
