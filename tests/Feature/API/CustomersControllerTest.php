@@ -3,23 +3,29 @@
 namespace Tests\Feature\API;
 
 use App\Models\Customer;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Testing\Fluent\AssertableJson;
-use PhpParser\Node\Expr\Instanceof_;
 use Tests\TestCase;
 
 class CustomersControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+
+    public function setUp() : void{
+
+        parent::setUp();
+        $this->authUser();
+    }
     public function test_customers_all_api(): void
     {
+
         Customer::factory(3)->create();
 
         $response = $this->get('/api/customers');
+
         $response->assertStatus(200);
 
         $jsonCustomers = $response->json()['customers'];
@@ -49,6 +55,7 @@ class CustomersControllerTest extends TestCase
     }
 
     public function test_customers_store_api(): void {
+
 
         $response = $this->postJson('/api/customers/store',
          [

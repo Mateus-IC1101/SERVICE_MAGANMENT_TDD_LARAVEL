@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CustomerAllController;
 use App\Http\Controllers\API\CustomerStoreController;
 use Illuminate\Http\Request;
@@ -16,10 +17,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// ROUTES AUTENTICATION FOR TESTING TDD
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('/customers', CustomerAllController::class);
+    Route::post('/customers/store', CustomerStoreController::class);
+
 });
 
-Route::get('/customers', CustomerAllController::class);
-Route::post('/customers/store', CustomerStoreController::class);
+// AUTH
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+
 
